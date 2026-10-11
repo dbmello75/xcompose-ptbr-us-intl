@@ -139,6 +139,8 @@ export XCOMPOSEFILE="$HOME/.XCompose"
 
 Depois da instalação, faça logout e login novamente.
 
+Ao final, o instalador oferece a opção de preparar um **relatório de compatibilidade opcional**. Caso aceite, uma Issue do GitHub será aberta já preenchida com dados técnicos do ambiente. O envio só acontece se você revisar e confirmar a Issue no GitHub.
+
 ## Instalação manual
 
 Também é possível instalar apenas o arquivo:
@@ -211,6 +213,16 @@ don't
 we'll
 John's
 ```
+
+## Ambientes testados
+
+| Distribuição | Desktop | Sessão | Layout | Status |
+|---|---|---|---|---|
+| Zorin OS 18 | Zorin / GNOME | Wayland | US International | ✅ Testado |
+
+A tabela é baseada em testes reais enviados por usuários do projeto.
+
+Ao final da instalação, o `install.sh` pode preparar opcionalmente um relatório de compatibilidade. **Nenhum dado é enviado automaticamente.** Se o usuário aceitar, o script abre uma nova Issue do GitHub já preenchida com informações como distribuição, desktop, tipo de sessão, layout configurado e versão do IBus. O usuário pode revisar o conteúdo antes de enviar.
 
 ## Compatibilidade
 
