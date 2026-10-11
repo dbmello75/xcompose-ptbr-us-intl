@@ -35,11 +35,29 @@ include "%L"
 
 # ---------------------------------------------------------------------------
 # Portuguese (Brazil) - grave accent
-# à / À
+#
+# Modern Brazilian Portuguese uses grave accent only with A:
+#   ` + a -> à
+#   ` + A -> À
+#
+# Other vowels are treated literally:
+#   ` + e -> `e
+#   ` + i -> `i
+#   ` + o -> `o
+#   ` + u -> `u
 # ---------------------------------------------------------------------------
 
 <dead_grave> <a> : "à" U00E0
 <dead_grave> <A> : "À" U00C0
+
+<dead_grave> <e> : "`e"
+<dead_grave> <E> : "`E"
+<dead_grave> <i> : "`i"
+<dead_grave> <I> : "`I"
+<dead_grave> <o> : "`o"
+<dead_grave> <O> : "`O"
+<dead_grave> <u> : "`u"
+<dead_grave> <U> : "`U"
 
 # ---------------------------------------------------------------------------
 # Portuguese (Brazil) - circumflex
