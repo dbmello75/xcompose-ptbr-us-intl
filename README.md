@@ -52,6 +52,22 @@ John's
 
 A exceção é a letra `c`, que propositalmente gera `ç`.
 
+## Aspas duplas no US International
+
+No layout US International, a tecla `"` normalmente funciona como `dead_diaeresis` e pode gerar caracteres como `ï`, `ẅ` e `ẍ`.
+
+Como esses caracteres não fazem parte do português brasileiro moderno e atrapalham a digitação em português/inglês, este projeto faz com que aspas duplas seguidas de uma letra sejam tratadas literalmente:
+
+```text
+" + espaço → "
+" + p      → "p
+" + w      → "w
+" + i      → "i
+" + x      → "x
+```
+
+Isso prioriza o uso cotidiano em PT-BR/inglês em vez da digitação direta de caracteres com trema.
+
 ## Como funciona
 
 O arquivo começa com:
