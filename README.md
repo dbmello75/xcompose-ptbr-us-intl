@@ -64,6 +64,19 @@ This means the system's existing Compose table remains available. The project on
 
 This keeps the configuration smaller and easier to audit than replacing the entire Compose table.
 
+## Repository structure
+
+```text
+xcompose-ptbr-us-intl/
+├── .XCompose
+├── README.md
+├── LICENSE
+├── install.sh
+├── uninstall.sh
+└── tests/
+    └── combinations.md
+```
+
 ## Installation
 
 Clone the repository:
@@ -73,7 +86,15 @@ git clone https://github.com/dbmello75/xcompose-ptbr-us-intl.git
 cd xcompose-ptbr-us-intl
 ```
 
-Copy the configuration to your home directory:
+For an automatic install:
+
+```bash
+bash install.sh
+```
+
+The installer backs up an existing `~/.XCompose` to `~/.XCompose.backup`, installs the project file, and ensures `XCOMPOSEFILE` is set in `~/.profile`.
+
+For a manual install, copy the configuration to your home directory:
 
 ```bash
 cp .XCompose ~/.XCompose
@@ -89,6 +110,16 @@ export XCOMPOSEFILE="$HOME/.XCompose"
 
 and log out/in again.
 
+## Uninstalling
+
+Run:
+
+```bash
+bash uninstall.sh
+```
+
+If the installer created a backup, the uninstall script restores it.
+
 ## Updating
 
 From the cloned repository:
@@ -99,6 +130,10 @@ cp .XCompose ~/.XCompose
 ```
 
 ## Testing
+
+A complete manual test matrix is available in [tests/combinations.md](tests/combinations.md).
+
+Quick test:
 
 Try these combinations after logging in again:
 
