@@ -4,9 +4,10 @@
 #
 # Goals:
 #   - Keep the system/default Compose rules.
-#   - Make acute-accent + c produce ç / Ç.
-#   - Preserve all common Brazilian Portuguese accent combinations.
-#   - Make the apostrophe/dead-acute key practical when typing English.
+#   - Preserve only the accent combinations used in modern Brazilian Portuguese.
+#   - Make apostrophe + c produce ç / Ç.
+#   - Make apostrophe + any other consonant literal: 'b, 'm, 's, etc.
+#   - Make double quote + any letter literal: "a, "p, "w, etc.
 #
 # License: MIT
 #
@@ -70,16 +71,22 @@ include "%L"
 <dead_cedilla> <C> : "Ç" U00C7
 
 # ---------------------------------------------------------------------------
-# English-friendly apostrophe behavior
+# Apostrophe behavior
 #
-# On some Linux Compose tables, dead_acute + consonant may create an accented
-# consonant (for example ń). For a bilingual PT-BR/English workflow, it is
-# usually more useful for these combinations to produce a literal apostrophe.
+# Rules:
+#   ' + vowel -> Brazilian Portuguese acute vowel (á é í ó ú)
+#   ' + c     -> ç
+#   ' + any other letter -> literal apostrophe + letter
+#
+# This prevents Linux Compose from generating accented consonants such as ń
+# while preserving the combinations needed by Brazilian Portuguese.
 #
 # Examples:
-#   ' + m -> 'm     (I'm)
-#   ' + s -> 's     (it's / John's)
-#   ' + t -> 't     (don't)
+#   ' + a -> á
+#   ' + c -> ç
+#   ' + m -> 'm
+#   ' + s -> 's
+#   ' + t -> 't
 # ---------------------------------------------------------------------------
 
 <dead_acute> <b> : "'b"
@@ -129,16 +136,18 @@ include "%L"
 
 
 # ---------------------------------------------------------------------------
-# English-friendly double quote behavior
+# Double quote behavior
 #
-# On US International, the double quote key acts as dead_diaeresis and may
-# produce characters such as ï, ẅ or ẍ. These are not part of modern
-# Brazilian Portuguese and are inconvenient in a PT-BR/English workflow.
+# On US International, the double quote key acts as dead_diaeresis.
+# Modern Brazilian Portuguese does not use diaeresis, so every letter after
+# double quote is treated literally.
 #
-# Therefore, double quote + letter produces a literal double quote followed
-# by the letter.
+# Rules:
+#   " + any letter -> literal double quote + letter
 #
 # Examples:
+#   " + a -> "a
+#   " + c -> "c
 #   " + p -> "p
 #   " + w -> "w
 #   " + i -> "i
