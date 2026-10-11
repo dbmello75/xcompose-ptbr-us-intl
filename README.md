@@ -79,63 +79,85 @@ xcompose-ptbr-us-intl/
     └── combinations.md
 ```
 
-## Instalação
+## Instalação rápida
 
-Clone o repositório:
+Você pode instalar diretamente do GitHub sem clonar o repositório:
+
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/dbmello75/xcompose-ptbr-us-intl/main/install.sh)"
+```
+
+O instalador baixa a versão atual do `.XCompose` diretamente deste repositório.
+
+### O instalador sobrescreve meu ~/.XCompose?
+
+Sim, o arquivo `~/.XCompose` precisa ser substituído para que esta configuração passe a ser usada.
+
+Por segurança, **na primeira instalação**, se já existir um `~/.XCompose`, o script preserva uma cópia do arquivo original em:
+
+```text
+~/.local/state/xcompose-ptbr-us-intl/original.XCompose
+```
+
+Esse backup original não é sobrescrito nas atualizações seguintes.
+
+Ao executar o `uninstall.sh`, o arquivo original é restaurado automaticamente.
+
+Se o `~/.XCompose` instalado já for idêntico à versão atual do repositório, o script simplesmente informa que ele já está atualizado.
+
+## Instalação usando git
+
+Se preferir clonar o projeto:
 
 ```bash
 git clone https://github.com/dbmello75/xcompose-ptbr-us-intl.git
 cd xcompose-ptbr-us-intl
-```
-
-Para instalar automaticamente:
-
-```bash
 bash install.sh
 ```
 
-O instalador:
-
-- faz backup de um `~/.XCompose` existente em `~/.XCompose.backup`;
-- copia o arquivo do projeto para `~/.XCompose`;
-- garante que `XCOMPOSEFILE` esteja configurado no `~/.profile`.
-
-Depois da instalação, encerre a sessão gráfica e entre novamente.
-
-### Instalação manual
-
-Também é possível instalar manualmente:
-
-```bash
-cp .XCompose ~/.XCompose
-```
-
-Se o seu ambiente gráfico não carregar automaticamente o `~/.XCompose`, adicione ao `~/.profile`:
+O instalador também garante que esta variável esteja configurada no `~/.profile`:
 
 ```bash
 export XCOMPOSEFILE="$HOME/.XCompose"
 ```
 
-Depois faça logout e login novamente.
+Depois da instalação, faça logout e login novamente.
+
+## Instalação manual
+
+Também é possível instalar apenas o arquivo:
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/dbmello75/xcompose-ptbr-us-intl/main/.XCompose -o ~/.XCompose
+```
+
+Nesse caso, o gerenciamento de backup fica por sua conta.
 
 ## Desinstalação
 
-Execute:
+Se você clonou o repositório:
 
 ```bash
 bash uninstall.sh
 ```
 
-Se o instalador tiver criado um backup, o script restaura automaticamente o `~/.XCompose` anterior.
+Se instalou diretamente com `curl`, pode executar o desinstalador da mesma forma:
+
+```bash
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/dbmello75/xcompose-ptbr-us-intl/main/uninstall.sh)"
+```
+
+Se existia um `~/.XCompose` antes da primeira instalação, ele será restaurado.
 
 ## Atualização
 
-Dentro do repositório clonado:
+Para atualizar para a versão mais recente, basta executar novamente:
 
 ```bash
-git pull
-bash install.sh
+bash -c "$(curl -fsSL https://raw.githubusercontent.com/dbmello75/xcompose-ptbr-us-intl/main/install.sh)"
 ```
+
+O backup da configuração original continua preservado.
 
 ## Testes
 
@@ -180,16 +202,7 @@ O comportamento do XCompose pode variar entre ambientes gráficos e toolkits.
 
 A configuração é voltada para sistemas Linux que utilizem uma pilha de entrada compatível com XCompose.
 
-Aplicativos executando via:
-
-- X11
-- Wayland
-- GTK
-- Qt
-- Chromium/Electron
-- frameworks de método de entrada
-
-podem não interpretar as regras exatamente da mesma forma.
+Aplicativos executando via X11, Wayland, GTK, Qt, Chromium/Electron ou frameworks de método de entrada podem não interpretar as regras exatamente da mesma forma.
 
 Se encontrar um problema de compatibilidade, abra uma issue informando:
 
