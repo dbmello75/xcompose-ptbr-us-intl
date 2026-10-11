@@ -1,0 +1,128 @@
+# xcompose-ptbr-us-intl
+#
+# Brazilian Portuguese-friendly XCompose rules for US International keyboards.
+#
+# Goals:
+#   - Keep the system/default Compose rules.
+#   - Make acute-accent + c produce ç / Ç.
+#   - Preserve all common Brazilian Portuguese accent combinations.
+#   - Make the apostrophe/dead-acute key practical when typing English.
+#
+# License: MIT
+#
+include "%L"
+
+# ---------------------------------------------------------------------------
+# Portuguese (Brazil) - acute accent
+# á é í ó ú / Á É Í Ó Ú
+# ---------------------------------------------------------------------------
+
+<dead_acute> <a> : "á" U00E1
+<dead_acute> <A> : "Á" U00C1
+<dead_acute> <e> : "é" U00E9
+<dead_acute> <E> : "É" U00C9
+<dead_acute> <i> : "í" U00ED
+<dead_acute> <I> : "Í" U00CD
+<dead_acute> <o> : "ó" U00F3
+<dead_acute> <O> : "Ó" U00D3
+<dead_acute> <u> : "ú" U00FA
+<dead_acute> <U> : "Ú" U00DA
+
+# Brazilian Portuguese cedilla using the apostrophe/dead-acute key.
+<dead_acute> <c> : "ç" U00E7
+<dead_acute> <C> : "Ç" U00C7
+
+# ---------------------------------------------------------------------------
+# Portuguese (Brazil) - grave accent
+# à / À
+# ---------------------------------------------------------------------------
+
+<dead_grave> <a> : "à" U00E0
+<dead_grave> <A> : "À" U00C0
+
+# ---------------------------------------------------------------------------
+# Portuguese (Brazil) - circumflex
+# â ê ô / Â Ê Ô
+# ---------------------------------------------------------------------------
+
+<dead_circumflex> <a> : "â" U00E2
+<dead_circumflex> <A> : "Â" U00C2
+<dead_circumflex> <e> : "ê" U00EA
+<dead_circumflex> <E> : "Ê" U00CA
+<dead_circumflex> <o> : "ô" U00F4
+<dead_circumflex> <O> : "Ô" U00D4
+
+# ---------------------------------------------------------------------------
+# Portuguese (Brazil) - tilde
+# ã õ / Ã Õ
+# ---------------------------------------------------------------------------
+
+<dead_tilde> <a> : "ã" U00E3
+<dead_tilde> <A> : "Ã" U00C3
+<dead_tilde> <o> : "õ" U00F5
+<dead_tilde> <O> : "Õ" U00D5
+
+# ---------------------------------------------------------------------------
+# Cedilla dead key, when the keyboard/layout exposes one
+# ---------------------------------------------------------------------------
+
+<dead_cedilla> <c> : "ç" U00E7
+<dead_cedilla> <C> : "Ç" U00C7
+
+# ---------------------------------------------------------------------------
+# English-friendly apostrophe behavior
+#
+# On some Linux Compose tables, dead_acute + consonant may create an accented
+# consonant (for example ń). For a bilingual PT-BR/English workflow, it is
+# usually more useful for these combinations to produce a literal apostrophe.
+#
+# Examples:
+#   ' + m -> 'm     (I'm)
+#   ' + s -> 's     (it's / John's)
+#   ' + t -> 't     (don't)
+# ---------------------------------------------------------------------------
+
+<dead_acute> <b> : "'b"
+<dead_acute> <B> : "'B"
+<dead_acute> <d> : "'d"
+<dead_acute> <D> : "'D"
+<dead_acute> <f> : "'f"
+<dead_acute> <F> : "'F"
+<dead_acute> <g> : "'g"
+<dead_acute> <G> : "'G"
+<dead_acute> <h> : "'h"
+<dead_acute> <H> : "'H"
+<dead_acute> <j> : "'j"
+<dead_acute> <J> : "'J"
+<dead_acute> <k> : "'k"
+<dead_acute> <K> : "'K"
+<dead_acute> <l> : "'l"
+<dead_acute> <L> : "'L"
+<dead_acute> <m> : "'m"
+<dead_acute> <M> : "'M"
+<dead_acute> <n> : "'n"
+<dead_acute> <N> : "'N"
+<dead_acute> <p> : "'p"
+<dead_acute> <P> : "'P"
+<dead_acute> <q> : "'q"
+<dead_acute> <Q> : "'Q"
+<dead_acute> <r> : "'r"
+<dead_acute> <R> : "'R"
+<dead_acute> <s> : "'s"
+<dead_acute> <S> : "'S"
+<dead_acute> <t> : "'t"
+<dead_acute> <T> : "'T"
+<dead_acute> <v> : "'v"
+<dead_acute> <V> : "'V"
+<dead_acute> <w> : "'w"
+<dead_acute> <W> : "'W"
+<dead_acute> <x> : "'x"
+<dead_acute> <X> : "'X"
+<dead_acute> <y> : "'y"
+<dead_acute> <Y> : "'Y"
+<dead_acute> <z> : "'z"
+<dead_acute> <Z> : "'Z"
+
+# Literal apostrophe
+<dead_acute> <space> : "'" apostrophe
+<dead_acute> <dead_acute> : "''"
