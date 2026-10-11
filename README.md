@@ -1,21 +1,21 @@
 # xcompose-ptbr-us-intl
 
-A small `.XCompose` configuration for Linux users who type in both **Brazilian Portuguese** and **English** on a **US International keyboard**.
+Uma configuração `.XCompose` simples para usuários Linux que digitam em **português do Brasil** e **inglês** usando um teclado **US International**.
 
-The goal is to keep the normal system Compose rules while fixing a few behaviors that are inconvenient for a PT-BR/English workflow.
+O objetivo é manter as regras padrão de Compose do sistema e corrigir apenas alguns comportamentos que são inconvenientes para quem alterna entre PT-BR e inglês.
 
-## What it fixes
+## O que este projeto corrige
 
-The most important rule is:
+A regra principal é:
 
 ```text
 ' + c  →  ç
 ' + C  →  Ç
 ```
 
-It also explicitly supports the characters used in modern Brazilian Portuguese:
+Ele também garante explicitamente os caracteres usados no português brasileiro moderno:
 
-| Keys | Result |
+| Teclas | Resultado |
 |---|---|
 | `' + a/e/i/o/u` | á é í ó ú |
 | `` ` + a `` | à |
@@ -23,15 +23,15 @@ It also explicitly supports the characters used in modern Brazilian Portuguese:
 | `~ + a/o` | ã õ |
 | `' + c` | ç |
 
-Uppercase versions are included as well.
+As versões maiúsculas também estão incluídas.
 
-## English-friendly apostrophe behavior
+## Apóstrofo amigável para digitação em inglês
 
-On some Linux Compose tables, the apostrophe key configured as `dead_acute` can combine with consonants and produce characters that are rarely useful in a Portuguese/English workflow.
+Em algumas tabelas Compose do Linux, a tecla de apóstrofo configurada como `dead_acute` pode se combinar com consoantes e produzir caracteres que raramente são úteis para quem escreve em português e inglês.
 
-This configuration makes consonant combinations behave as a literal apostrophe plus the letter.
+Esta configuração faz com que essas combinações produzam um apóstrofo literal seguido da letra.
 
-Examples:
+Exemplos:
 
 ```text
 ' + m  →  'm
@@ -40,7 +40,7 @@ Examples:
 ' + n  →  'n
 ```
 
-That makes normal English contractions comfortable to type:
+Isso torna natural a digitação de contrações comuns em inglês:
 
 ```text
 I'm
@@ -50,21 +50,23 @@ we'll
 John's
 ```
 
-The exception is `c`, which intentionally produces `ç`.
+A exceção é a letra `c`, que propositalmente gera `ç`.
 
-## Design
+## Como funciona
 
-The file starts with:
+O arquivo começa com:
 
 ```text
 include "%L"
 ```
 
-This means the system's existing Compose table remains available. The project only overrides combinations that are useful for Brazilian Portuguese and bilingual Portuguese/English typing.
+Isso mantém disponível a tabela Compose padrão do sistema.
 
-This keeps the configuration smaller and easier to audit than replacing the entire Compose table.
+O projeto sobrescreve apenas as combinações necessárias para melhorar a digitação em português do Brasil e inglês.
 
-## Repository structure
+Essa abordagem mantém o arquivo menor, mais fácil de entender e mais simples de auditar do que substituir toda a tabela Compose.
+
+## Estrutura do repositório
 
 ```text
 xcompose-ptbr-us-intl/
@@ -77,65 +79,69 @@ xcompose-ptbr-us-intl/
     └── combinations.md
 ```
 
-## Installation
+## Instalação
 
-Clone the repository:
+Clone o repositório:
 
 ```bash
 git clone https://github.com/dbmello75/xcompose-ptbr-us-intl.git
 cd xcompose-ptbr-us-intl
 ```
 
-For an automatic install:
+Para instalar automaticamente:
 
 ```bash
 bash install.sh
 ```
 
-The installer backs up an existing `~/.XCompose` to `~/.XCompose.backup`, installs the project file, and ensures `XCOMPOSEFILE` is set in `~/.profile`.
+O instalador:
 
-For a manual install, copy the configuration to your home directory:
+- faz backup de um `~/.XCompose` existente em `~/.XCompose.backup`;
+- copia o arquivo do projeto para `~/.XCompose`;
+- garante que `XCOMPOSEFILE` esteja configurado no `~/.profile`.
+
+Depois da instalação, encerre a sessão gráfica e entre novamente.
+
+### Instalação manual
+
+Também é possível instalar manualmente:
 
 ```bash
 cp .XCompose ~/.XCompose
 ```
 
-Then log out of your graphical session and log back in.
-
-If your desktop environment does not automatically load `~/.XCompose`, add this to `~/.profile`:
+Se o seu ambiente gráfico não carregar automaticamente o `~/.XCompose`, adicione ao `~/.profile`:
 
 ```bash
 export XCOMPOSEFILE="$HOME/.XCompose"
 ```
 
-and log out/in again.
+Depois faça logout e login novamente.
 
-## Uninstalling
+## Desinstalação
 
-Run:
+Execute:
 
 ```bash
 bash uninstall.sh
 ```
 
-If the installer created a backup, the uninstall script restores it.
+Se o instalador tiver criado um backup, o script restaura automaticamente o `~/.XCompose` anterior.
 
-## Updating
+## Atualização
 
-From the cloned repository:
+Dentro do repositório clonado:
 
 ```bash
 git pull
-cp .XCompose ~/.XCompose
+bash install.sh
 ```
 
-## Testing
+## Testes
 
-A complete manual test matrix is available in [tests/combinations.md](tests/combinations.md).
+Uma matriz de testes está disponível em [tests/combinations.md](tests/combinations.md).
 
-Quick test:
-
-Try these combinations after logging in again:
+Teste rápido:
 
 ```text
 ' + a   → á
@@ -151,24 +157,57 @@ Try these combinations after logging in again:
 ' + s   → 's
 ```
 
-## Compatibility
+Também vale testar palavras reais:
 
-XCompose behavior can vary between desktop environments and application toolkits.
+```text
+ação
+coração
+informação
+você
+português
+São Paulo
 
-The configuration is intended for Linux systems using an XCompose-compatible input stack. Applications running through X11, Wayland, GTK, Qt, Chromium/Electron, or an input-method framework may not all consume Compose rules in exactly the same way.
+I'm
+it's
+don't
+we'll
+John's
+```
 
-If you find an application or desktop environment where a rule does not work, please open an issue and include:
+## Compatibilidade
 
-- Linux distribution and version
-- desktop environment
-- X11 or Wayland
-- keyboard layout
-- application where the problem occurs
+O comportamento do XCompose pode variar entre ambientes gráficos e toolkits.
 
-## Similar projects
+A configuração é voltada para sistemas Linux que utilizem uma pilha de entrada compatível com XCompose.
 
-This project follows the same general idea as other community XCompose configurations for bilingual PT-BR/US-International users, while intentionally keeping the file small and relying on the system Compose table wherever possible.
+Aplicativos executando via:
 
-## License
+- X11
+- Wayland
+- GTK
+- Qt
+- Chromium/Electron
+- frameworks de método de entrada
 
-MIT License. See [LICENSE](LICENSE).
+podem não interpretar as regras exatamente da mesma forma.
+
+Se encontrar um problema de compatibilidade, abra uma issue informando:
+
+- distribuição Linux e versão;
+- ambiente gráfico;
+- X11 ou Wayland;
+- layout do teclado;
+- aplicativo em que o problema ocorre;
+- se a combinação funciona normalmente em outros aplicativos.
+
+## Projetos semelhantes
+
+Existem outros projetos e configurações da comunidade com objetivo semelhante para usuários de PT-BR em teclado US International.
+
+Este projeto adota uma abordagem intencionalmente minimalista: mantém a tabela Compose padrão do sistema e sobrescreve somente os casos necessários para uma experiência confortável em português do Brasil e inglês.
+
+## Licença
+
+Este projeto é distribuído sob a licença MIT.
+
+Consulte o arquivo [LICENSE](LICENSE).
