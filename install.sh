@@ -1,35 +1,61 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
-SOURCE_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SOURCE_FILE="${SOURCE_DIR}/.XCompose"
+RAW_BASE_URL="https://raw.githubusercontent.com/dbmello75/xcompose-ptbr-us-intl/main"
 TARGET_FILE="${HOME}/.XCompose"
-BACKUP_FILE="${HOME}/.XCompose.backup"
+PROFILE="${HOME}/.profile"
+STATE_DIR="${XDG_STATE_HOME:-${HOME}/.local/state}/xcompose-ptbr-us-intl"
+ORIGINAL_BACKUP="${STATE_DIR}/original.XCompose"
+HAD_ORIGINAL="${STATE_DIR}/had_original"
 
-if [[ ! -f "${SOURCE_FILE}" ]]; then
-  echo "Error: ${SOURCE_FILE} not found."
+command -v curl >/dev/null 2>&1 || {
+  echo "Erro: curl não está instalado."
   exit 1
+}
+
+mkdir -p "${STATE_DIR}"
+
+# Save the user's original ~/.XCompose only on the first installation.
+if [[ ! -f "${HAD_ORIGINAL}" ]]; then
+  if [[ -f "${TARGET_FILE}" ]]; then
+    cp -p "${TARGET_FILE}" "${ORIGINAL_BACKUP}"
+    printf 'yes\n' > "${HAD_ORIGINAL}"
+    echo "Backup do ~/.XCompose atual salvo em:"
+    echo "  ${ORIGINAL_BACKUP}"
+  else
+    printf 'no\n' > "${HAD_ORIGINAL}"
+  fi
 fi
 
-if [[ -f "${TARGET_FILE}" ]]; then
-  cp "${TARGET_FILE}" "${BACKUP_FILE}"
-  echo "Existing ~/.XCompose backed up to ~/.XCompose.backup"
+TMP_FILE="$(mktemp)"
+trap 'rm -f "${TMP_FILE}"' EXIT
+
+echo "Baixando .XCompose..."
+curl -fsSL "${RAW_BASE_URL}/.XCompose" -o "${TMP_FILE}"
+
+if [[ -f "${TARGET_FILE}" ]] && cmp -s "${TMP_FILE}" "${TARGET_FILE}"; then
+  echo "~/.XCompose já está atualizado."
+else
+  install -m 0644 "${TMP_FILE}" "${TARGET_FILE}"
+  echo "Instalado em ~/.XCompose"
 fi
 
-cp "${SOURCE_FILE}" "${TARGET_FILE}"
-echo "Installed ${SOURCE_FILE} to ${TARGET_FILE}"
+PROFILE_MARKER="# xcompose-ptbr-us-intl"
+PROFILE_EXPORT='export XCOMPOSEFILE="$HOME/.XCompose"'
 
-if ! grep -qs 'XCOMPOSEFILE="$HOME/.XCompose"' "${HOME}/.profile" 2>/dev/null; then
-  cat >> "${HOME}/.profile" <<'EOF'
+touch "${PROFILE}"
 
-# Use the custom XCompose file installed by xcompose-ptbr-us-intl
+if ! grep -Fqs "${PROFILE_MARKER}" "${PROFILE}"; then
+  cat >> "${PROFILE}" <<'EOF'
+
+# xcompose-ptbr-us-intl
 export XCOMPOSEFILE="$HOME/.XCompose"
 EOF
-  echo 'Added XCOMPOSEFILE to ~/.profile'
+  echo "XCOMPOSEFILE adicionado ao ~/.profile"
 else
-  echo 'XCOMPOSEFILE is already configured in ~/.profile'
+  echo "XCOMPOSEFILE já está configurado pelo projeto no ~/.profile"
 fi
 
 echo
-echo "Installation complete."
-echo "Log out of your graphical session and log back in for the change to take effect."
+echo "Instalação concluída."
+echo "Faça logout e login novamente para garantir que a nova configuração seja carregada."
