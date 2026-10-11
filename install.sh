@@ -185,3 +185,92 @@ echo "  ' + m  -> 'm"
 echo
 echo "Se algum aplicativo ainda estiver usando a configuração anterior,"
 echo "faça logout e login novamente."
+
+# ---------------------------------------------------------------------------
+# Optional compatibility report
+# ---------------------------------------------------------------------------
+
+INPUT_SOURCES="unknown"
+if command -v gsettings >/dev/null 2>&1 &&
+   gsettings list-schemas 2>/dev/null | grep -qx 'org.gnome.desktop.input-sources'; then
+  INPUT_SOURCES="$(gsettings get org.gnome.desktop.input-sources sources 2>/dev/null || echo unknown)"
+fi
+
+IBUS_VERSION="not found"
+if command -v ibus >/dev/null 2>&1; then
+  IBUS_VERSION="$(ibus version 2>/dev/null || echo installed)"
+fi
+
+REPORT_BODY="$(cat <<EOF
+## Relatório de compatibilidade
+
+- **Distribuição:** ${OS_NAME}
+- **Desktop:** ${DESKTOP}
+- **Sessão:** ${SESSION_TYPE}
+- **Input sources:** ${INPUT_SOURCES}
+- **IBus:** ${IBUS_VERSION}
+
+### Resultado da instalação
+
+- [x] install.sh executado
+- [ ] ç / Ç
+- [ ] á é í ó ú
+- [ ] à
+- [ ] â ê ô
+- [ ] ã õ
+- [ ] apóstrofo + consoante
+- [ ] aspas duplas + letra
+
+### Observações
+
+Descreva aqui qualquer comportamento diferente do esperado.
+EOF
+)"
+
+echo
+echo "Ajude a melhorar a tabela de compatibilidade do projeto."
+echo "Nenhum dado será enviado automaticamente."
+echo "Se você aceitar, será aberta uma Issue do GitHub já preenchida"
+echo "com informações técnicas deste ambiente para você revisar e enviar."
+echo
+
+if [[ -t 0 ]]; then
+  read -r -p "Deseja preparar um relatório de compatibilidade? [s/N] " SEND_REPORT
+else
+  SEND_REPORT="n"
+fi
+
+case "${SEND_REPORT:-n}" in
+  s|S|sim|SIM|y|Y|yes|YES)
+    ISSUE_URL="$(python3 - "${REPORT_BODY}" <<'PY'
+import sys
+from urllib.parse import urlencode
+
+body = sys.argv[1]
+params = urlencode({
+    "title": "Compatibility report",
+    "body": body
+})
+print("https://github.com/dbmello75/xcompose-ptbr-us-intl/issues/new?" + params)
+PY
+)"
+
+    echo
+    echo "Relatório preparado."
+
+    if command -v xdg-open >/dev/null 2>&1; then
+      echo "Abrindo o GitHub no navegador..."
+      xdg-open "${ISSUE_URL}" >/dev/null 2>&1 || {
+        echo "Não foi possível abrir o navegador automaticamente."
+        echo "Abra este endereço:"
+        echo "${ISSUE_URL}"
+      }
+    else
+      echo "Abra este endereço no navegador:"
+      echo "${ISSUE_URL}"
+    fi
+    ;;
+  *)
+    echo "Relatório não solicitado."
+    ;;
+esac
