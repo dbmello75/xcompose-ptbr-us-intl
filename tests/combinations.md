@@ -94,3 +94,20 @@ If a combination fails, record:
 - whether it works in another application
 
 This helps distinguish an XCompose rule problem from an application/toolkit input-method issue.
+
+
+## Aspas duplas
+
+No layout US International, a tecla de aspas duplas funciona como `dead_diaeresis`.
+Neste projeto ela deve se comportar como aspas literais para letras.
+
+| Teclas | Esperado |
+|---|---|
+| `" + espaço` | `"` |
+| `" + c` | `"c` |
+| `" + p` | `"p` |
+| `" + w` | `"w` |
+| `" + i` | `"i` |
+| `" + x` | `"x` |
+
+Caracteres como `ï`, `ẅ` e `ẍ` não devem ser produzidos por essas combinações.
