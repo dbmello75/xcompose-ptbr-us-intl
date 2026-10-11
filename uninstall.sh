@@ -2,19 +2,21 @@
 set -euo pipefail
 
 TARGET_FILE="${HOME}/.XCompose"
-BACKUP_FILE="${HOME}/.XCompose.backup"
 PROFILE="${HOME}/.profile"
+STATE_DIR="${XDG_STATE_HOME:-${HOME}/.local/state}/xcompose-ptbr-us-intl"
+ORIGINAL_BACKUP="${STATE_DIR}/original.XCompose"
+HAD_ORIGINAL="${STATE_DIR}/had_original"
 
-if [[ -f "${TARGET_FILE}" ]]; then
-  rm "${TARGET_FILE}"
-  echo "Removed ~/.XCompose"
+if [[ -f "${HAD_ORIGINAL}" ]]; then
+  if [[ "$(cat "${HAD_ORIGINAL}")" == "yes" && -f "${ORIGINAL_BACKUP}" ]]; then
+    cp -p "${ORIGINAL_BACKUP}" "${TARGET_FILE}"
+    echo "Seu ~/.XCompose original foi restaurado."
+  else
+    rm -f "${TARGET_FILE}"
+    echo "~/.XCompose instalado pelo projeto foi removido."
+  fi
 else
-  echo "~/.XCompose was not present."
-fi
-
-if [[ -f "${BACKUP_FILE}" ]]; then
-  mv "${BACKUP_FILE}" "${TARGET_FILE}"
-  echo "Restored previous ~/.XCompose from ~/.XCompose.backup"
+  echo "Estado da instalação não encontrado; ~/.XCompose não foi alterado."
 fi
 
 if [[ -f "${PROFILE}" ]]; then
@@ -24,13 +26,15 @@ import sys
 
 path = Path(sys.argv[1])
 text = path.read_text()
-block = '\n# Use the custom XCompose file installed by xcompose-ptbr-us-intl\nexport XCOMPOSEFILE="$HOME/.XCompose"\n'
+block = '\n# xcompose-ptbr-us-intl\nexport XCOMPOSEFILE="$HOME/.XCompose"\n'
 if block in text:
     path.write_text(text.replace(block, '\n'))
-    print("Removed xcompose-ptbr-us-intl entry from ~/.profile")
+    print("Entrada do projeto removida de ~/.profile")
 PY
 fi
 
+rm -rf "${STATE_DIR}"
+
 echo
-echo "Uninstall complete."
-echo "Log out of your graphical session and log back in for the change to take effect."
+echo "Desinstalação concluída."
+echo "Faça logout e login novamente para garantir que a alteração seja aplicada."
